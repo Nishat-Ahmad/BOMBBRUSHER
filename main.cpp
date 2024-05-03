@@ -9,12 +9,9 @@
 using namespace std;
 using namespace sf;
 
-<<<<<<< HEAD
-
 int main(){
     bombCheck C;
     C.gameController();
-=======
 void Pause(bool game_pause, RenderWindow *window, Game *play, Event event) {
 	while (game_pause) {
 		window->clear();
@@ -28,7 +25,6 @@ void Pause(bool game_pause, RenderWindow *window, Game *play, Event event) {
 			return;
 		}
 	}
->>>>>>> 95e81271b70a824e17ccc8ddc464153046bec1dd
 }
 
 int main() {
