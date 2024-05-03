@@ -1,8 +1,11 @@
 #include"Button.cpp"
 #include<SFML\Graphics.hpp>
+#include<Windows.h>
+
 class Board {
 protected:
 	mouseClick click;
+	firstClick_control_switch first_click_switch = On;
 	Button buttons[10][10];
 	Mine mine[10][10];
 	int board[10][10];
@@ -10,6 +13,7 @@ protected:
 	int x, y;
 	int total_mines = 0;
 	Vector2f mousePos;
+
 public:
 	Board() {
 		srand(time(0));
@@ -35,7 +39,7 @@ public:
 	void Randomize_mines() {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-				if (rand() % 5 == 0) {
+				if (rand() % 5 == 0 && buttons[i][j].getButtonState() == IDLE) {
 					board[i][j] = 0;
 					mine[i][j] = MINE;
 					total_mines++;
@@ -70,13 +74,12 @@ public:
 	void Print(RenderWindow* window) {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-				if (buttons[i][j].getButtonState() == USED)
+				if (buttons[i][j].getButtonState() == USED && mine[i][j] != MINE)
 					buttons[i][j].updateTexture_Revealed();
 				buttons[i][j].RenderButton(window);
+
 				if (buttons[i][j].getButtonState() == USED)
 					buttons[i][j].UpdateText(board[i][j], window);
-				if (buttons[i][j].getButtonState() == USED && mine[x][y] == MINE)
-					buttons[i][j].updateTexture_Exploded();
 			}
 		}
 	}
@@ -98,6 +101,7 @@ public:
 class bombCheck : public Board {
 protected:
 	int choice;
+
 public:
 	bool gameRunner = true;
 
@@ -152,6 +156,13 @@ public:
 	}
 
 	void lose() {
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				if (mine[i][j] == MINE)
+					buttons[i][j].updateTexture_Mine();
+			}
+		}
+		buttons[x][y].updateTexture_Exploded();
 		gameRunner = false;
 	}
 
@@ -162,6 +173,7 @@ public:
 					buttons[i][j].setButtonState(USED);
 			}
 		}
+		gameRunner = false;
 	}
 
 	void revealSpace() {
@@ -192,19 +204,18 @@ public:
 			lose();
 		}
 	}
-
-	void Right_Click_Functionality() {
-
-	}
 };
 
 class Game : public bombCheck {
-private:
-
 public:
 	void gamecontroller(RenderWindow* window) {
+		click = I;
 		Print(window);
 		assignCoordinates(window);
+
+		if (click != I)
+			Sleep(30);
+
 		switch (click) {
 		case L:
 			if (buttons[x][y].getButtonState() == USED)
