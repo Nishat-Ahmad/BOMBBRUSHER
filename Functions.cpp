@@ -1,11 +1,17 @@
 #include"Button.cpp"
 #include<SFML\Graphics.hpp>
+<<<<<<< HEAD
 #include<Windows.h>
 
 class Board {
 protected:
 	mouseClick click;
 	firstClick_control_switch first_click_switch = On;
+=======
+class Board {
+protected:
+	mouseClick click;
+>>>>>>> c2455f4faad6282a34d3709b3e0a514c0ecd8c00
 	Button buttons[10][10];
 	Mine mine[10][10];
 	int board[10][10];
@@ -13,7 +19,10 @@ protected:
 	int x, y;
 	int total_mines = 0;
 	Vector2f mousePos;
+<<<<<<< HEAD
 
+=======
+>>>>>>> c2455f4faad6282a34d3709b3e0a514c0ecd8c00
 public:
 	Board() {
 		srand(time(0));
@@ -39,7 +48,11 @@ public:
 	void Randomize_mines() {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
+<<<<<<< HEAD
 				if (rand() % 5 == 0 && buttons[i][j].getButtonState() == IDLE) {
+=======
+				if (rand() % 5 == 0) {
+>>>>>>> c2455f4faad6282a34d3709b3e0a514c0ecd8c00
 					board[i][j] = 0;
 					mine[i][j] = MINE;
 					total_mines++;
@@ -74,12 +87,22 @@ public:
 	void Print(RenderWindow* window) {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
+<<<<<<< HEAD
 				if (buttons[i][j].getButtonState() == USED && mine[i][j] != MINE)
 					buttons[i][j].updateTexture_Revealed();
 				buttons[i][j].RenderButton(window);
 
 				if (buttons[i][j].getButtonState() == USED)
 					buttons[i][j].UpdateText(board[i][j], window);
+=======
+				if (buttons[i][j].getButtonState() == USED)
+					buttons[i][j].updateTexture_Revealed();
+				buttons[i][j].RenderButton(window);
+				if (buttons[i][j].getButtonState() == USED)
+					buttons[i][j].UpdateText(board[i][j], window);
+				if (buttons[i][j].getButtonState() == USED && mine[x][y] == MINE)
+					buttons[i][j].updateTexture_Exploded();
+>>>>>>> c2455f4faad6282a34d3709b3e0a514c0ecd8c00
 			}
 		}
 	}
@@ -101,7 +124,10 @@ public:
 class bombCheck : public Board {
 protected:
 	int choice;
+<<<<<<< HEAD
 
+=======
+>>>>>>> c2455f4faad6282a34d3709b3e0a514c0ecd8c00
 public:
 	bool gameRunner = true;
 
@@ -156,6 +182,7 @@ public:
 	}
 
 	void lose() {
+<<<<<<< HEAD
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				if (mine[i][j] == MINE)
@@ -163,6 +190,8 @@ public:
 			}
 		}
 		buttons[x][y].updateTexture_Exploded();
+=======
+>>>>>>> c2455f4faad6282a34d3709b3e0a514c0ecd8c00
 		gameRunner = false;
 	}
 
@@ -173,7 +202,10 @@ public:
 					buttons[i][j].setButtonState(USED);
 			}
 		}
+<<<<<<< HEAD
 		gameRunner = false;
+=======
+>>>>>>> c2455f4faad6282a34d3709b3e0a514c0ecd8c00
 	}
 
 	void revealSpace() {
@@ -204,6 +236,7 @@ public:
 			lose();
 		}
 	}
+<<<<<<< HEAD
 };
 
 class Game : public bombCheck {
@@ -216,6 +249,21 @@ public:
 		if (click != I)
 			Sleep(30);
 
+=======
+
+	void Right_Click_Functionality() {
+
+	}
+};
+
+class Game : public bombCheck {
+private:
+
+public:
+	void gamecontroller(RenderWindow* window) {
+		Print(window);
+		assignCoordinates(window);
+>>>>>>> c2455f4faad6282a34d3709b3e0a514c0ecd8c00
 		switch (click) {
 		case L:
 			if (buttons[x][y].getButtonState() == USED)
