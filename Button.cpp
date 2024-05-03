@@ -11,8 +11,6 @@ private:
 	int pos_x, pos_y;
 	btnState btn_state;
 
-	Texture Mine;
-
 	Texture T_Mine;
 	Texture T_Exploded_Mine;
 	Texture T_Tile;
@@ -24,7 +22,7 @@ private:
 	Font font;
 public:
 
-	Button() {
+	Button(){
 		this->shape.setPosition(0, 0);
 		this->shape.setSize(Vector2f(30, 30));
 
@@ -128,5 +126,9 @@ public:
 
 	void updateTexture_Flag() {
 		shape.setTexture(&T_Flag);
+	}
+
+	void updateTexture_Mine() {
+		shape.setTexture(&T_Mine);
 	}
 };
