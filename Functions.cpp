@@ -1,16 +1,10 @@
 #include"Button.cpp"
 #include<SFML\Graphics.hpp>
-<<<<<<< HEAD
 #include<Windows.h>
 
-class Board {
+class Board{
 protected:
 	mouseClick click;
-	firstClick_control_switch first_click_switch = On;
-class Board {
-protected:
-	mouseClick click;
->>>>>>> c2455f4faad6282a34d3709b3e0a514c0ecd8c00
 	Button buttons[10][10];
 	Mine mine[10][10];
 	int board[10][10];
@@ -45,20 +39,21 @@ public:
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				if (rand() % 5 == 0 && buttons[i][j].getButtonState() == IDLE) {
-				if (rand() % 5 == 0) {
-					board[i][j] = 0;
-					mine[i][j] = MINE;
-					total_mines++;
-				}
-				else {
-					board[i][j] = 0;
-					mine[i][j] = SPACE;
+					if (rand() % 5 == 0) {
+						board[i][j] = 0;
+						mine[i][j] = MINE;
+						total_mines++;
+					}
+					else {
+						board[i][j] = 0;
+						mine[i][j] = SPACE;
+					}
 				}
 			}
 		}
 	}
 
-	void Initialize_board() {
+	void Initialize_board(){
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				if (mine[i][j] == SPACE) {
@@ -226,9 +221,6 @@ public:
 
 		if (click != I)
 			Sleep(30);
-
-	void Right_Click_Functionality() {
-
 	}
 };
 

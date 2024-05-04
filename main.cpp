@@ -9,24 +9,6 @@
 using namespace std;
 using namespace sf;
 
-int main(){
-    bombCheck C;
-    C.gameController();
-void Pause(bool game_pause, RenderWindow *window, Game *play, Event event) {
-	while (game_pause) {
-		window->clear();
-		play->Print(window);
-		window->display();
-		if (event.type == Event::Closed) {
-			window->close();
-		}
-		if (Keyboard::isKeyPressed(Keyboard::P)) {
-			game_pause = false;
-			return;
-		}
-	}
-}
-
 int main() {
 	RenderWindow window(VideoMode(340, 340), "BOMBBRUSHER™");
 	Event event;
