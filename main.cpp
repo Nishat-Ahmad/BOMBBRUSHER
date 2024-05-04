@@ -18,7 +18,7 @@ void Pause(bool game_pause, RenderWindow* window, Game* play, Event event) {
 		}
 	}
 }
-
+ 
 int main() {
 	RenderWindow window(VideoMode(340, 340), "BOMBBRUSHER™");
 	Event event;
