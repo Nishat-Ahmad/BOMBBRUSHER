@@ -16,6 +16,7 @@ protected:
 	int total_mines = 0;
 	Vector2f mousePos;
 
+
 public:
 	Board() {
 		srand(time(0));

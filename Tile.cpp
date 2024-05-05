@@ -4,7 +4,7 @@ using namespace sf;
 enum mouseClick { L, R, I };
 enum btnState { IDLE, ACTIVE, USED };
 enum Mine { MINE, SPACE, FLAG };
-
+  
 class Button {
 private:
 	RectangleShape shape;
@@ -20,8 +20,8 @@ private:
 
 	Text text;
 	Font font;
-public:
 
+public:
 	Button(){
 		this->shape.setPosition(0, 0);
 		this->shape.setSize(Vector2f(30, 30));
