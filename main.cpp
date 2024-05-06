@@ -23,7 +23,7 @@ void Pause(bool game_pause, RenderWindow* window, Game* play, Event event) {
 	}
 }
  
-int main() {
+int main(){
 	//	Renders the main window.
 	RenderWindow window(VideoMode(800, 600), "BOMBBRUSHER");
 
@@ -64,21 +64,21 @@ int main() {
 			cout << "Easy button clicked!\n";
 			selectDifficultyWindow.close();
 			openEasyModeWindow();
-		});
+			});
 
 		ScreenButton mediumDifficultyButton(Vector2f(300, 250), Vector2f(200, 50), "Medium", []() {
 			cout << "Medium button clicked!\n";
-		});
+			});
 
 		ScreenButton hardDifficultyButton(Vector2f(300, 350), Vector2f(200, 50), "Hard", []() {
 			cout << "Hard button clicked!\n";
-		});
+			});
 
 		ScreenButton backButton(Vector2f(300, 450), Vector2f(200, 50), "Back", [&]() {
 			cout << "Back button clicked!\n";
 			selectDifficultyWindow.close();
 			mainWindow.create(VideoMode(800, 600), "BOMBBRUSHER");
-		});
+			});
 
 		while (selectDifficultyWindow.isOpen()) {
 			Event event;
@@ -88,68 +88,51 @@ int main() {
 				if (event.type == Event::Closed)
 					selectDifficultyWindow.close();
 
-				// Handle easyButton click.
+				// Handles button clicks.
 				if (event.type == Event::MouseButtonPressed) {
 					if (event.mouseButton.button == Mouse::Left) {
 						Vector2f mousePos = selectDifficultyWindow.mapPixelToCoords(Vector2i(event.mouseButton.x, event.mouseButton.y));
+						// Handle easyButton click.
 						if (easyDifficultyButton.contains(mousePos)) {
 							easyDifficultyButton.handleClick();
 						}
-					}
-				}
-
-				// Handle mediumButton click.
-				if (event.type == Event::MouseButtonPressed) {
-					if (event.mouseButton.button == Mouse::Left) {
-						Vector2f mousePos = selectDifficultyWindow.mapPixelToCoords(Vector2i(event.mouseButton.x, event.mouseButton.y));
-						if (mediumDifficultyButton.contains(mousePos)) {
+						// Handle mediumButton click.
+						else if (mediumDifficultyButton.contains(mousePos)) {
 							mediumDifficultyButton.handleClick();
 						}
-					}
-				}
-
-				// Handle hardButton click.
-				if (event.type == Event::MouseButtonPressed) {
-					if (event.mouseButton.button == Mouse::Left) {
-						Vector2f mousePos = selectDifficultyWindow.mapPixelToCoords(Vector2i(event.mouseButton.x, event.mouseButton.y));
-						if (hardDifficultyButton.contains(mousePos)) {
+						// Handle hardButton click.
+						else if (hardDifficultyButton.contains(mousePos)) {
 							hardDifficultyButton.handleClick();
 						}
-					}
-				}
-
-				// Handle backButton click.
-				if (event.type == Event::MouseButtonPressed) {
-					if (event.mouseButton.button == Mouse::Left) {
-						Vector2f mousePos = selectDifficultyWindow.mapPixelToCoords(Vector2i(event.mouseButton.x, event.mouseButton.y));
-						if (backButton.contains(mousePos)) {
+						// Handle backButton click.
+						else if (backButton.contains(mousePos)) {
 							backButton.handleClick();
 						}
 					}
 				}
+
+				// Gets mouse position
+				Vector2f mousePos = selectDifficultyWindow.mapPixelToCoords(Mouse::getPosition(selectDifficultyWindow));
+
+				// Handle hover effect for buttons.
+				easyDifficultyButton.handleHover(mousePos);
+				mediumDifficultyButton.handleHover(mousePos);
+				hardDifficultyButton.handleHover(mousePos);
+				backButton.handleHover(mousePos);
+
+				//	Needs to be here, as if it is after Draw, it will hide buttons.
+				selectDifficultyWindow.clear(Color::White);
+
+				// Draw the button
+				easyDifficultyButton.draw(selectDifficultyWindow);
+				mediumDifficultyButton.draw(selectDifficultyWindow);
+				hardDifficultyButton.draw(selectDifficultyWindow);
+				backButton.draw(selectDifficultyWindow);
+				textBox.draw(selectDifficultyWindow);
+
+				//	Display window.
+				selectDifficultyWindow.display();
 			}
-
-			// Gets mouse position
-			Vector2f mousePos = selectDifficultyWindow.mapPixelToCoords(Mouse::getPosition(selectDifficultyWindow));
-
-			// Handle hover effect for buttons.
-			easyDifficultyButton.handleHover(mousePos);
-			mediumDifficultyButton.handleHover(mousePos);
-			hardDifficultyButton.handleHover(mousePos);
-			backButton.handleHover(mousePos);
-			
-			//	Needs to be here, as if it is after Draw, it will hide buttons.
-			selectDifficultyWindow.clear(Color::White);
-
-			// Draw the button
-			easyDifficultyButton.draw(selectDifficultyWindow);
-			mediumDifficultyButton.draw(selectDifficultyWindow);
-			hardDifficultyButton.draw(selectDifficultyWindow);
-			backButton.draw(selectDifficultyWindow);
-			textBox.draw(selectDifficultyWindow);
-
-			//	Display window.
-			selectDifficultyWindow.display();
 		}
 	};
 
@@ -176,21 +159,16 @@ int main() {
 				if (event.type == Event::Closed)   
 					window.close();
 				 
-				//	Runs when "Play" on main screen is clicked.
+				//	Handles button click for main window.
 				if (event.type == Event::MouseButtonPressed) {
 					if (event.mouseButton.button == Mouse::Left) {
 						Vector2f mousePos = window.mapPixelToCoords(Vector2i(event.mouseButton.x, event.mouseButton.y));
+						//	Runs when "Play" on main screen is clicked.
 						if (playbutton.contains(mousePos)) {
 							playbutton.handleClick();
 						}
-					}
-				}
-
-				//	Runs when "High Score" on main screen is clicked.
-				if (event.type == Event::MouseButtonPressed) {
-					if (event.mouseButton.button == Mouse::Left) {
-						Vector2f mousePos = window.mapPixelToCoords(Vector2i(event.mouseButton.x, event.mouseButton.y));
-						if (highScoreButton.contains(mousePos)) {
+						//	Runs when "High Score" on main screen is clicked.
+						else if (highScoreButton.contains(mousePos)) {
 							highScoreButton.handleClick();
 						}
 					}
