@@ -52,8 +52,8 @@ int main(){
 			}
 		}
 	};
-
-	//	Code for the difficulty selection window.
+	//	This is test.
+	//	Code for the difficulty selection window. 
 	auto openSelectDifficultyWindow = [&](RenderWindow& mainWindow) {
 		// Closes the main window.
 		window.close();
