@@ -1,6 +1,6 @@
 #include"Tile.cpp"
 #include<SFML\Graphics.hpp>
-#include<Windows.h>
+#include<Windows.h> // Your mom gay
 
 enum firstClick_control_switch { On, Off };
 
