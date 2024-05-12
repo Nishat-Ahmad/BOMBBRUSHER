@@ -44,8 +44,8 @@ public:
 	void Initialize_button() {
 		int coor_x = x_offset;
 		int coor_y = y_offset;
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
+		for (int i = 0; i < difficulty; i++) {
+			for (int j = 0; j < difficulty; j++) {
 				mine[i][j] = SPACE;
 				buttons[i][j].setPosition(coor_x, coor_y);
 				buttons[i][j].setButtonState(IDLE);
@@ -55,20 +55,22 @@ public:
 			coor_x = x_offset;
 		}
 	}
-	void Initialize_button() {
-	int coor_x = x_offset;
-	int coor_y = y_offset;
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0; j < 10; j++) {
-			mine[i][j] = SPACE;
-			buttons[i][j].setPosition(coor_x, coor_y);
-			buttons[i][j].setButtonState(IDLE);
-			coor_x += spacing_factor;
+  
+  void Initialize_button() {
+		int coor_x = x_offset;
+		int coor_y = y_offset;
+		for (int i = 0; i < difficulty; i++) {
+			for (int j = 0; j < difficulty; j++) {
+				mine[i][j] = SPACE;
+				buttons[i][j].setPosition(coor_x, coor_y);
+				buttons[i][j].setButtonState(IDLE);
+				coor_x += spacing_factor;
+			}
+			coor_y += spacing_factor;
+			coor_x = x_offset;
 		}
-		coor_y += spacing_factor;
-		coor_x = x_offset;
 	}
-}
+  
 void Randomize_mines() {
 	int numberOfMines;
 	switch (difficulty) {
@@ -98,14 +100,15 @@ void Randomize_mines() {
 	}
 }
 	void Initialize_board() {
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
+		for (int i = 0; i < difficulty; i++) {
+			for (int j = 0; j < difficulty; j++) {
 				if (mine[i][j] == SPACE) {
+					board[i][j] = 0;
 					for (int k = -1; k <= 1; k++) {
 						for (int l = -1; l <= 1; l++) {
 							int y = j + k;
 							int x = i + l;
-							if (x >= 0 && x < 10 && y >= 0 && y < 10 && mine[x][y] == MINE) {
+							if (x >= 0 && x < difficulty && y >= 0 && y < difficulty && mine[x][y] == MINE) {
 								board[i][j]++;
 							}
 						}
@@ -117,8 +120,8 @@ void Randomize_mines() {
 
 
 	void Print(RenderWindow* window) {
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
+		for (int i = 0; i < difficulty; i++) {
+			for (int j = 0; j < difficulty; j++) {
 				if (buttons[i][j].getButtonState() == USED && mine[i][j] != MINE)
 					buttons[i][j].updateTexture_Revealed();
 				buttons[i][j].RenderButton(window);
@@ -131,8 +134,8 @@ void Randomize_mines() {
 
 	void assignCoordinates(RenderWindow* window) {
 		int numberOfMines;
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
+		for (int i = 0; i < difficulty; i++) {
+			for (int j = 0; j < difficulty; j++) {
 				click = buttons[i][j].Click(Vector2f(static_cast<float>(Mouse::getPosition(*window).x), static_cast<float>(Mouse::getPosition(*window).y)));
 				if (click != I) {
 					x = buttons[i][j].getIndex_x(x_offset, spacing_factor);
@@ -169,7 +172,7 @@ public:
 				for (int l = -1; l <= 1; l++) {
 					int i = x + k;
 					int j = y + l;
-					if (i >= 0 && i < 10 && j >= 0 && j < 10 && mine[i][j] == MINE) {
+					if (i >= 0 && i < difficulty && j >= 0 && j < difficulty && mine[i][j] == MINE) {
 						mine_counter++;
 					}
 				}
@@ -187,7 +190,7 @@ public:
 			for (int l = -1; l <= 1; l++) {
 				int i = x + k;
 				int j = y + l;
-				if (i >= 0 && i < 10 && j >= 0 && j < 10) {
+				if (i >= 0 && i < difficulty && j >= 0 && j < difficulty) {
 					if (buttons[i][j].getButtonState() == ACTIVE) {
 						flag_Counter++;
 					}
@@ -216,8 +219,8 @@ public:
 	}
 
 	void lose() {
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
+		for (int i = 0; i < difficulty; i++) {
+			for (int j = 0; j < difficulty; j++) {
 				if (mine[i][j] == MINE)
 					buttons[i][j].updateTexture_Mine();
 			}
@@ -227,8 +230,8 @@ public:
 	}
 
 	void win() {
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
+		for (int i = 0; i < difficulty; i++) {
+			for (int j = 0; j < difficulty; j++) {
 				if (buttons[i][j].getButtonState() != ACTIVE)
 					buttons[i][j].setButtonState(USED);
 			}
@@ -254,7 +257,7 @@ public:
 				for (int l = -1; l <= 1; l++) {
 					int i = x + k;
 					int j = y + l;
-					if (i >= 0 && i < 10 && j >= 0 && j < 10) {
+					if (i >= 0 && i < difficulty && j >= 0 && j < difficulty) {
 						if (buttons[i][j].getButtonState() != ACTIVE) {
 							buttons[i][j].setButtonState(USED);
 
