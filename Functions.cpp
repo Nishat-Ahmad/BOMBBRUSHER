@@ -2,12 +2,9 @@
 #include<SFML\Graphics.hpp>
 #include<Windows.h>
 
-enum firstClick_control_switch { On, Off };
-
 class Board {
 protected:
 	mouseClick click;
-	firstClick_control_switch first_click_switch = On;
 	Button** buttons;
 	Mine** mine;
 	int** board;
@@ -17,7 +14,6 @@ protected:
 	Vector2f mousePos;
 	int difficulty;
 	bool firstClick = true;
-
 
 public:
 	Board(int difficulty = 10) {
@@ -29,7 +25,7 @@ public:
 		Initialize_button();
 	}
 	void allocateMemory() {
-		buttons = new Button*[difficulty];
+		buttons = new Button * [difficulty];
 		mine = new Mine * [difficulty];
 		board = new int* [difficulty];
 		for (int i = 0; i < difficulty; i++) {
@@ -94,7 +90,6 @@ public:
 		}
 	}
 
-
 	void Print(RenderWindow* window) {
 		for (int i = 0; i < difficulty; i++) {
 			for (int j = 0; j < difficulty; j++) {
@@ -120,8 +115,9 @@ public:
 				}
 			}
 		}
-		
+
 	}
+
 	~Board() {
 		for (int i = 0; i < difficulty; i++) {
 			delete[] buttons[i];
@@ -139,7 +135,7 @@ protected:
 	int choice;
 
 public:
-	bombCheck(int difficulty = 10) : Board(difficulty){}
+	bombCheck(int difficulty = 10) : Board(difficulty) {}
 	bool gameRunner = true;
 	void checkEmpty() {
 
@@ -258,7 +254,7 @@ public:
 		click = I;
 		Print(window);
 		assignCoordinates(window);
-		
+
 		if (click != I)
 			Sleep(30);
 		if (firstClick) {
