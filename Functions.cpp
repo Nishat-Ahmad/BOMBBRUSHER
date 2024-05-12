@@ -36,6 +36,9 @@ public:
 			buttons[i] = new Button[difficulty];
 			mine[i] = new Mine[difficulty];
 			board[i] = new int[difficulty];
+			if (i >= 0 && i < 10 && j >= 0 && j < 10 && mine[i][j] == MINE) {
+				mine_counter++;
+			}
 		}
 	}
 	void Initialize_button() {
@@ -159,9 +162,6 @@ protected:
 public:
 	bombCheck(int difficulty = 10) : Board(difficulty){}
 	bool gameRunner = true;
-	void checkEmpty() {
-
-	}
 	int checkMine() {
 		int mine_counter = 0;
 		if (mine[x][y] == SPACE && buttons[x][y].getButtonState() == USED) {
