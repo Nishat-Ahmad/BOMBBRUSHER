@@ -36,6 +36,9 @@ public:
 			buttons[i] = new Button[difficulty];
 			mine[i] = new Mine[difficulty];
 			board[i] = new int[difficulty];
+			if (i >= 0 && i < 10 && j >= 0 && j < 10 && mine[i][j] == MINE) {
+				mine_counter++;
+			}
 		}
 	}
 	void Initialize_button() {
@@ -52,29 +55,48 @@ public:
 			coor_x = x_offset;
 		}
 	}
-	void Randomize_mines() {
-		int numberOfMines;
-		switch (difficulty) {
-		case 10:
-			numberOfMines = 12;
-			break;
-		case 20:
-			numberOfMines = 40;
-			break;
-		case 30:
-			numberOfMines = 80;
-			break;
+	void Initialize_button() {
+	int coor_x = x_offset;
+	int coor_y = y_offset;
+	for (int i = 0; i < 10; i++) {
+		for (int j = 0; j < 10; j++) {
+			mine[i][j] = SPACE;
+			buttons[i][j].setPosition(coor_x, coor_y);
+			buttons[i][j].setButtonState(IDLE);
+			coor_x += spacing_factor;
 		}
-		while (total_mines < numberOfMines) {
-			int i = rand() % difficulty;
-			int j = rand() % difficulty;
-			if (mine[i][j] != MINE && !(i == x && j == y)) {
-				mine[i][j] = MINE;
-				total_mines++;
-			}
+		coor_y += spacing_factor;
+		coor_x = x_offset;
+	}
+}
+void Randomize_mines() {
+	int numberOfMines;
+	switch (difficulty) {
+	case 10:
+		numberOfMines = 12;
+		break;
+	case 20:
+		numberOfMines = 40;
+		break;
+	case 30:
+		numberOfMines = 80;
+		break;
+	}
+	int minX = std::max(0, x - 1);
+	int maxX = std::min(difficulty - 1, x + 1);
+	int minY = std::max(0, y - 1);
+	int maxY = std::min(difficulty - 1, y + 1);
+
+	while (total_mines < numberOfMines) {
+		int i = rand() % (maxX - minX + 1) + minX;  
+		int j = rand() % (maxY - minY + 1) + minY;
+
+		if (mine[i][j] != MINE && !(i >= minX && i <= maxX && j >= minY && j <= maxY)) {
+			mine[i][j] = MINE;
+			total_mines++;
 		}
 	}
-
+}
 	void Initialize_board() {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
@@ -140,9 +162,6 @@ protected:
 public:
 	bombCheck(int difficulty = 10) : Board(difficulty){}
 	bool gameRunner = true;
-	void checkEmpty() {
-
-	}
 	int checkMine() {
 		int mine_counter = 0;
 		if (mine[x][y] == SPACE && buttons[x][y].getButtonState() == USED) {
