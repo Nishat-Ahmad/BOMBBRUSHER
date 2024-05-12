@@ -8,28 +8,42 @@ class Board {
 protected:
 	mouseClick click;
 	firstClick_control_switch first_click_switch = On;
-	Button buttons[10][10];
-	Mine mine[10][10];
-	int board[10][10];
+	Button** buttons;
+	Mine** mine;
+	int** board;
 	const int x_offset = 10, y_offset = 10, spacing_factor = 32;
 	int x, y;
 	int total_mines = 0;
 	Vector2f mousePos;
+	int difficulty;
+	bool firstClick = true;
 
 
 public:
-	Board() {
-		srand(time(0));
-		Initialize_button();
-		Randomize_mines();
-		Initialize_board();
-	}
+	Board(int difficulty = 10) {
+		int numberOfMines;
+		this->difficulty = difficulty;
 
+		srand(time(0));
+		allocateMemory();
+		Initialize_button();
+	}
+	void allocateMemory() {
+		buttons = new Button*[difficulty];
+		mine = new Mine * [difficulty];
+		board = new int* [difficulty];
+		for (int i = 0; i < difficulty; i++) {
+			buttons[i] = new Button[difficulty];
+			mine[i] = new Mine[difficulty];
+			board[i] = new int[difficulty];
+		}
+	}
 	void Initialize_button() {
 		int coor_x = x_offset;
 		int coor_y = y_offset;
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
+				mine[i][j] = SPACE;
 				buttons[i][j].setPosition(coor_x, coor_y);
 				buttons[i][j].setButtonState(IDLE);
 				coor_x += spacing_factor;
@@ -38,19 +52,25 @@ public:
 			coor_x = x_offset;
 		}
 	}
-
 	void Randomize_mines() {
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 10; j++) {
-				if (rand() % 5 == 0 && buttons[i][j].getButtonState() == IDLE) {
-					board[i][j] = 0;
-					mine[i][j] = MINE;
-					total_mines++;
-				}
-				else {
-					board[i][j] = 0;
-					mine[i][j] = SPACE;
-				}
+		int numberOfMines;
+		switch (difficulty) {
+		case 10:
+			numberOfMines = 12;
+			break;
+		case 20:
+			numberOfMines = 40;
+			break;
+		case 30:
+			numberOfMines = 80;
+			break;
+		}
+		while (total_mines < numberOfMines) {
+			int i = rand() % difficulty;
+			int j = rand() % difficulty;
+			if (mine[i][j] != MINE && !(i == x && j == y)) {
+				mine[i][j] = MINE;
+				total_mines++;
 			}
 		}
 	}
@@ -88,6 +108,7 @@ public:
 	}
 
 	void assignCoordinates(RenderWindow* window) {
+		int numberOfMines;
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				click = buttons[i][j].Click(Vector2f(static_cast<float>(Mouse::getPosition(*window).x), static_cast<float>(Mouse::getPosition(*window).y)));
@@ -98,6 +119,17 @@ public:
 				}
 			}
 		}
+		
+	}
+	~Board() {
+		for (int i = 0; i < difficulty; i++) {
+			delete[] buttons[i];
+			delete[] mine[i];
+			delete[] board[i];
+		}
+		delete[] buttons;
+		delete[] mine;
+		delete[] board;
 	}
 };
 
@@ -106,8 +138,11 @@ protected:
 	int choice;
 
 public:
+	bombCheck(int difficulty = 10) : Board(difficulty){}
 	bool gameRunner = true;
+	void checkEmpty() {
 
+	}
 	int checkMine() {
 		int mine_counter = 0;
 		if (mine[x][y] == SPACE && buttons[x][y].getButtonState() == USED) {
@@ -133,8 +168,11 @@ public:
 			for (int l = -1; l <= 1; l++) {
 				int i = x + k;
 				int j = y + l;
-				if (i >= 0 && i < 10 && j >= 0 && j < 10 && buttons[i][j].getButtonState() == ACTIVE)
-					flag_Counter++;
+				if (i >= 0 && i < 10 && j >= 0 && j < 10) {
+					if (buttons[i][j].getButtonState() == ACTIVE) {
+						flag_Counter++;
+					}
+				}
 			}
 		}
 		return flag_Counter;
@@ -197,8 +235,11 @@ public:
 				for (int l = -1; l <= 1; l++) {
 					int i = x + k;
 					int j = y + l;
-					if (i >= 0 && i < 10 && j >= 0 && j < 10 && buttons[i][j].getButtonState() != ACTIVE) {
-						buttons[i][j].setButtonState(USED);
+					if (i >= 0 && i < 10 && j >= 0 && j < 10) {
+						if (buttons[i][j].getButtonState() != ACTIVE) {
+							buttons[i][j].setButtonState(USED);
+
+						}
 					}
 				}
 			}
@@ -211,14 +252,19 @@ public:
 
 class Game : public bombCheck {
 public:
+	Game(int difficulty = 10) : bombCheck(difficulty) {}
 	void gamecontroller(RenderWindow* window) {
 		click = I;
 		Print(window);
 		assignCoordinates(window);
-
+		
 		if (click != I)
 			Sleep(30);
-
+		if (firstClick) {
+			Randomize_mines();
+			Initialize_board();
+			firstClick = false;
+		}
 		switch (click) {
 		case L:
 			if (buttons[x][y].getButtonState() == USED)
