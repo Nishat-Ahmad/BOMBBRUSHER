@@ -105,14 +105,26 @@ int main() {
 
 	auto openHighScoreWindow = [&](RenderWindow& mainWindow) {
 		//	Renders the easy game mode.
-		RenderWindow HighScoreWindow(VideoMode(660, 700), "BOMBBRUSHER");
+		RenderWindow HighScoreWindow(VideoMode(600, 600), "BOMBBRUSHER");
 		Event event;
 
-		ScreenButton backButton(Vector2f(300, 450), Vector2f(200, 50), "Back", [&]() {
+		ScreenButton backButton(Vector2f(210, 500), Vector2f(200, 50), "Back", [&]() {
 			cout << "Back button clicked!\n";
 			HighScoreWindow.close();
 			mainWindow.create(VideoMode(400, 400), "BOMBBRUSHER");
 			});
+
+		ScreenButton easyButton(Vector2f(10, 50), Vector2f(180, 50), "Easy", []() {
+			cout << "Easy button clicked!\n";
+		});
+
+		ScreenButton mediumButton(Vector2f(210, 50), Vector2f(180, 50), "Medium", []() {
+			cout << "Medium button clicked!\n";
+		});
+
+		ScreenButton hardButton(Vector2f(410, 50), Vector2f(180, 50), "Hard", []() {
+			cout << "Hard button clicked!\n";
+		});
 
 		while (HighScoreWindow.isOpen()) {
 			while (HighScoreWindow.pollEvent(event)) {
@@ -128,20 +140,35 @@ int main() {
 						if (backButton.contains(mousePos)) {
 							backButton.handleClick();
 						}
+						else if (easyButton.contains(mousePos)) {
+							easyButton.handleClick();
+						}
+						else if (mediumButton.contains(mousePos)) {
+							mediumButton.handleClick();
+						}
+						else if (hardButton.contains(mousePos)) {
+							hardButton.handleClick();
+						}
 					}
 				}
 
 				// Gets mouse position
 				Vector2f mousePos = HighScoreWindow.mapPixelToCoords(Mouse::getPosition(HighScoreWindow));
 
+				HighScoreWindow.clear(Color::White);
 				// Handle hover effect for buttons.
 				backButton.handleHover(mousePos);
+				easyButton.handleHover(mousePos);
+				mediumButton.handleHover(mousePos);
+				hardButton.handleHover(mousePos);
 
 				// Draw the button
 				backButton.draw(HighScoreWindow);
+				easyButton.draw(HighScoreWindow);
+				mediumButton.draw(HighScoreWindow);
+				hardButton.draw(HighScoreWindow);
 
 				//	Display window.
-				HighScoreWindow.clear(Color::Black);
 				HighScoreWindow.display();
 			}
 		}
