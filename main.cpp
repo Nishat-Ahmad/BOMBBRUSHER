@@ -25,7 +25,7 @@ void Pause(bool game_pause, RenderWindow* window, Game* play, Event event) {
  
 int main(){
 	//	Renders the main window.
-	RenderWindow window(VideoMode(800, 600), "BOMBBRUSHER");
+	RenderWindow window(VideoMode(400, 400), "BOMBBRUSHER");
 
 	//	Code that runs the easy mode of the game.
 	auto openEasyModeWindow = [&]() {
@@ -138,11 +138,11 @@ int main(){
 
 	//	This loop is running the main window.
 	while (window.isOpen()) {
-		TextBox textBox(Vector2f(300, 100), Vector2f(200, 40), "BOMBBRUSHER");
-
+		TextBox textBox(Vector2f(100, 70), Vector2f(700, 140), "BOMBBRUSHER");
+		textBox.setTexture();
 		// Create the play button.
 		ScreenButton playbutton(Vector2f(300, 200), Vector2f(200, 50), "Play", [&]() {
-			openSelectDifficultyWindow(window);
+			openSelectDifficultyWindow(window); 
 		});
 
 		// Create the high score button.

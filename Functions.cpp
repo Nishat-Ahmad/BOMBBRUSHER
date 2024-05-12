@@ -79,6 +79,7 @@ public:
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				if (mine[i][j] == SPACE) {
+					board[i][j] = 0;
 					for (int k = -1; k <= 1; k++) {
 						for (int l = -1; l <= 1; l++) {
 							int y = j + k;
