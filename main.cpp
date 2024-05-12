@@ -48,6 +48,7 @@ int main(){
 					play = new Game;
 					play->gameRunner = true;
 				}
+				easyGameWindow.clear(Color::White);
 				easyGameWindow.display();
 			}
 		}
@@ -73,6 +74,7 @@ int main(){
 					play = new Game(15);
 					play->gameRunner = true;
 				}
+				mediumGameWindow.clear(Color::White);
 				mediumGameWindow.display();
 			}
 		}
@@ -98,9 +100,54 @@ int main(){
 					play = new Game(20);
 					play->gameRunner = true;
 				}
+				HardGameWindow.clear(Color::White);
 				HardGameWindow.display();
 			}
 		}
+		};
+
+	auto openHighScoreWindow = [&](RenderWindow& mainWindow) {
+			//	Renders the easy game mode.
+			RenderWindow HighScoreWindow(VideoMode(660, 700), "BOMBBRUSHER");
+			Event event;
+
+			ScreenButton backButton(Vector2f(300, 450), Vector2f(200, 50), "Back", [&]() {
+				cout << "Back button clicked!\n";
+				HighScoreWindow.close();
+				mainWindow.create(VideoMode(400, 400), "BOMBBRUSHER");
+			});
+
+			while (HighScoreWindow.isOpen()) {
+				while (HighScoreWindow.pollEvent(event)) {
+					if (event.type == Event::Closed) {
+						HighScoreWindow.close();
+					}
+
+					// Handles button clicks.
+					if (event.type == Event::MouseButtonPressed) {
+						if (event.mouseButton.button == Mouse::Left) {
+							Vector2f mousePos = HighScoreWindow.mapPixelToCoords(Vector2i(event.mouseButton.x, event.mouseButton.y));
+							// Handle backButton click.
+							if (backButton.contains(mousePos)) {
+								backButton.handleClick();
+							}
+						}
+					}
+
+					// Gets mouse position
+					Vector2f mousePos = HighScoreWindow.mapPixelToCoords(Mouse::getPosition(HighScoreWindow));
+
+					// Handle hover effect for buttons.
+					backButton.handleHover(mousePos);
+
+					// Draw the button
+					backButton.draw(HighScoreWindow);
+
+					//	Display window.
+					HighScoreWindow.clear(Color::Black);
+					HighScoreWindow.display();
+				}
+			}
 		};
 
 	//	Code for the difficulty selection window. 
@@ -131,7 +178,7 @@ int main(){
 		ScreenButton backButton(Vector2f(300, 450), Vector2f(200, 50), "Back", [&]() {
 			cout << "Back button clicked!\n";
 			selectDifficultyWindow.close();
-			mainWindow.create(VideoMode(800, 600), "BOMBBRUSHER");
+			mainWindow.create(VideoMode(400, 400), "BOMBBRUSHER");
 			});
 
 		while (selectDifficultyWindow.isOpen()) {
@@ -190,18 +237,21 @@ int main(){
 		}
 	};
 
-	//	This loop is running the main window.
+	//	This loop is running the home window.
 	while (window.isOpen()) {
 		TextBox textBox(Vector2f(100, 70), Vector2f(700, 140), "BOMBBRUSHER");
 		textBox.setTexture();
 		// Create the play button.
 		ScreenButton playbutton(Vector2f(300, 200), Vector2f(200, 50), "Play", [&]() {
+			cout << "Play was pressed" << endl;
 			openSelectDifficultyWindow(window); 
 		});
 
 		// Create the high score button.
-		ScreenButton highScoreButton(Vector2f(300, 300), Vector2f(200, 50), "High Score", [](){
+		ScreenButton highScoreButton(Vector2f(300, 300), Vector2f(200, 50), "High Score", [&](){
 			cout << "High Score button clicked!\n";
+			window.close();
+			openHighScoreWindow(window);
 		});
 
 		//	Running the main window.
