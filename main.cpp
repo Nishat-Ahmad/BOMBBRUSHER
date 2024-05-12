@@ -16,13 +16,13 @@ void Pause(bool game_pause, RenderWindow* window, Game* play, Event event) {
 		if (event.type == Event::Closed) {
 			window->close();
 		}
-		if (Keyboard::isKeyPressed(Keyboard::P)) {
+		if (Keyboard::isKeyPressed(Keyboard::P)){
 			game_pause = false;
 			return;
 		}
 	}
-}
- 
+} 
+
 int main(){
 	//	Renders the main window.
 	RenderWindow window(VideoMode(400, 400), "BOMBBRUSHER");
@@ -30,7 +30,7 @@ int main(){
 	//	Code that runs the easy mode of the game.
 	auto openEasyModeWindow = [&]() {
 		//	Renders the easy game mode.
-		RenderWindow easyGameWindow(VideoMode(340, 340), "BOMBBRUSHER");
+		RenderWindow easyGameWindow(VideoMode(340, 400), "BOMBBRUSHER");
 		Event event;
 
 		Game* play = new Game;
@@ -52,7 +52,57 @@ int main(){
 			}
 		}
 	};
-	//	This is test.
+
+	auto openMediumModeWindow = [&]() {
+		//	Renders the easy game mode.
+		RenderWindow mediumGameWindow(VideoMode(500, 540), "BOMBBRUSHER");
+		Event event;
+
+		Game* play = new Game(15);
+		
+		while (mediumGameWindow.isOpen()) {
+			while (mediumGameWindow.pollEvent(event)) {
+				if (event.type == Event::Closed) {
+					mediumGameWindow.close();
+				}
+				mediumGameWindow.clear();
+				play->gamecontroller(&mediumGameWindow);
+				if (play->gameRunner == false) {
+					Pause(true, &mediumGameWindow, play, event);
+					delete play;
+					play = new Game(15);
+					play->gameRunner = true;
+				}
+				mediumGameWindow.display();
+			}
+		}
+	};
+
+	auto openHardModeWindow = [&]() {
+		//	Renders the easy game mode.
+		RenderWindow HardGameWindow(VideoMode(660, 700), "BOMBBRUSHER"); 
+		Event event;
+
+		Game* play = new Game(20);
+
+		while (HardGameWindow.isOpen()) {
+			while (HardGameWindow.pollEvent(event)) {
+				if (event.type == Event::Closed) {
+					HardGameWindow.close();
+				}
+				HardGameWindow.clear();
+				play->gamecontroller(&HardGameWindow);
+				if (play->gameRunner == false) {
+					Pause(true, &HardGameWindow, play, event);
+					delete play;
+					play = new Game(20);
+					play->gameRunner = true;
+				}
+				HardGameWindow.display();
+			}
+		}
+		};
+
 	//	Code for the difficulty selection window. 
 	auto openSelectDifficultyWindow = [&](RenderWindow& mainWindow) {
 		// Closes the main window.
@@ -66,12 +116,16 @@ int main(){
 			openEasyModeWindow();
 			});
 
-		ScreenButton mediumDifficultyButton(Vector2f(300, 250), Vector2f(200, 50), "Medium", []() {
+		ScreenButton mediumDifficultyButton(Vector2f(300, 250), Vector2f(200, 50), "Medium", [&]() {
 			cout << "Medium button clicked!\n";
+			selectDifficultyWindow.close();
+			openMediumModeWindow();
 			});
 
-		ScreenButton hardDifficultyButton(Vector2f(300, 350), Vector2f(200, 50), "Hard", []() {
+		ScreenButton hardDifficultyButton(Vector2f(300, 350), Vector2f(200, 50), "Hard", [&]() {
 			cout << "Hard button clicked!\n";
+			selectDifficultyWindow.close();
+			openHardModeWindow();
 			});
 
 		ScreenButton backButton(Vector2f(300, 450), Vector2f(200, 50), "Back", [&]() {
