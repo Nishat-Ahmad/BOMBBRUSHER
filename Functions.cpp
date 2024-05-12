@@ -16,31 +16,17 @@ protected:
 	int total_mines = 0;
 	Vector2f mousePos;
 	int difficulty;
+	bool firstClick = true;
 
 
 public:
-	Board(int difficulty = 0) {
+	Board(int difficulty = 10) {
 		int numberOfMines;
-		switch (difficulty) {
-		case 0:
-			numberOfMines = 12;
-			this->difficulty = 10;
-			break;
-		case 1:
-			numberOfMines = 40;
-			this->difficulty = 20;
-			break;
-		case 2:
-			numberOfMines = 80;
-			this->difficulty = 30;
-			break;
-		}
+		this->difficulty = difficulty;
 
 		srand(time(0));
 		allocateMemory();
 		Initialize_button();
-		Randomize_mines(numberOfMines);
-		Initialize_board();
 	}
 	void allocateMemory() {
 		buttons = new Button*[difficulty];
@@ -66,11 +52,23 @@ public:
 			coor_x = x_offset;
 		}
 	}
-	void Randomize_mines(int numberOfMines) {
+	void Randomize_mines() {
+		int numberOfMines;
+		switch (difficulty) {
+		case 10:
+			numberOfMines = 12;
+			break;
+		case 20:
+			numberOfMines = 40;
+			break;
+		case 30:
+			numberOfMines = 80;
+			break;
+		}
 		while (total_mines < numberOfMines) {
 			int i = rand() % difficulty;
 			int j = rand() % difficulty;
-			if (mine[i][j] != MINE) {
+			if (mine[i][j] != MINE && !(i == x && j == y)) {
 				mine[i][j] = MINE;
 				total_mines++;
 			}
@@ -110,6 +108,7 @@ public:
 	}
 
 	void assignCoordinates(RenderWindow* window) {
+		int numberOfMines;
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				click = buttons[i][j].Click(Vector2f(static_cast<float>(Mouse::getPosition(*window).x), static_cast<float>(Mouse::getPosition(*window).y)));
@@ -120,6 +119,7 @@ public:
 				}
 			}
 		}
+		
 	}
 	~Board() {
 		for (int i = 0; i < difficulty; i++) {
@@ -138,7 +138,7 @@ protected:
 	int choice;
 
 public:
-	bombCheck(int difficulty = 0) : Board(difficulty){}
+	bombCheck(int difficulty = 10) : Board(difficulty){}
 	bool gameRunner = true;
 	void checkEmpty() {
 
@@ -238,6 +238,7 @@ public:
 					if (i >= 0 && i < 10 && j >= 0 && j < 10) {
 						if (buttons[i][j].getButtonState() != ACTIVE) {
 							buttons[i][j].setButtonState(USED);
+
 						}
 					}
 				}
@@ -251,15 +252,19 @@ public:
 
 class Game : public bombCheck {
 public:
-	Game(int difficulty = 0) : bombCheck(difficulty) {}
+	Game(int difficulty = 10) : bombCheck(difficulty) {}
 	void gamecontroller(RenderWindow* window) {
 		click = I;
 		Print(window);
 		assignCoordinates(window);
-
+		
 		if (click != I)
 			Sleep(30);
-
+		if (firstClick) {
+			Randomize_mines();
+			Initialize_board();
+			firstClick = false;
+		}
 		switch (click) {
 		case L:
 			if (buttons[x][y].getButtonState() == USED)
