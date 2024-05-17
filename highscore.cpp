@@ -15,9 +15,9 @@ class Score {
 	public:
 		Score(int difficulty = 10) {
 			this->difficulty = difficulty;
-			ifstream infile("easy.txt", ios::in);
+			ifstream infile("easy.txt", ios::in);	//	opening file in write mode.
 			startTime = time(0);
-			switch(difficulty) {
+			switch(difficulty) {					//	Opening diffrent files depending on difficulty.
 			case 10:
 				infile.open("easy.txt");
 				break;
@@ -33,7 +33,7 @@ class Score {
 			if (infile.is_open()) {
 				int num; string name;
 				int i = 0;
-				while (infile >> num) {
+				while (infile >> num) {				//	Reading file and storing values in arrays.
 					scores[i] = num;
 					infile >> name;
 					names[i] = name;
@@ -45,33 +45,33 @@ class Score {
 				std::cout << "Failed to open file for reading." << std::endl;
 			}
 		}
-		void insertionSort() {
+		void insertionSort() {							//	Insertion sort.
 			for (int i = 1; i < 10; ++i) {
 				int tempscore = scores[i];
 				string tempname = names[i];
 				int j = i - 1;
 
-				while (j >= 0 && scores[j] > tempscore) {
+				while (j >= 0 && scores[j] > tempscore) {	//	Shifting values to the right.
 					scores[j + 1] = scores[j];
 					names[j + 1] = names[j];
 					j = j - 1;
 				}
-				scores[j + 1] = tempscore;
+				scores[j + 1] = tempscore;					//	Inserting the new values.
 				names[j + 1] = tempname;
 			}
 		}
-		int getTime() {
+		int getTime() {								//	Just getting the time.
 			return time(0) - startTime;
 		}
-		string* getNames() {
+		string* getNames() {						//	Getting names.
 			return names;
 		}
-		int* getScores() {
+		int* getScores() {						//	Getting scores.
 			return scores;
 		}
 		void gameEnd() {
 			ofstream outfile("easy.txt");
-			switch (difficulty) {
+			switch (difficulty) {				//	Opening file based on difficulty.
 			case 10:
 				outfile.open("easy.txt");
 				break;
@@ -88,8 +88,8 @@ class Score {
 			if (score > scores[0]) {
 				scores[0] = score;
 			}
-			insertionSort();
-			for (int i = 0; i < 10; i++) {
+			insertionSort();					//	Running insertion sort.
+			for (int i = 0; i < 10; i++) {		//	Outputting file content.
 				outfile << names[i] << endl;
 				outfile << scores[i] << endl;
 			}

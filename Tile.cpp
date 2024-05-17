@@ -9,7 +9,7 @@ class Button {
 private:
 	// Using a rectangle for tile
 	RectangleShape shape;
-	// pos_x and pos_y store the place of tile placed from left and upper borders of the windo
+	// pos_x and pos_y store the place of tile placed from left and upper borders of the window.
 	int pos_x, pos_y;
 	btnState btn_state;
 
@@ -70,7 +70,7 @@ public:
 		int temp = (pos_x - starting_pos) / spacing_factor;
 		return temp;
 	}
-
+ 
 	// uses the formula provided to return the y_index of a tile
 	int getIndex_y(int starting_pos, int spacing_factor) {
 		int temp = (pos_y - starting_pos) / spacing_factor;
@@ -132,7 +132,7 @@ public:
 		}
 	}
 
-	// the functions update the textures accordingly
+	// These functions update the textures accordingly.
 	void updateTexture_Tile() {
 		shape.setTexture(&T_Tile);
 	}

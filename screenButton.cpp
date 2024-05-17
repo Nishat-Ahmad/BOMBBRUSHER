@@ -11,14 +11,13 @@ private:
     RectangleShape shape;
     Text text;
     Font font;
-    function<void()> onClick;
+    function<void()> onClick;   //  It represents a general-purpose, type-safe function wrapper. You can attach any functinoality with onclick.
     Color hoverColor;
     Color defaultColor;
 
 public:
     ScreenButton(Vector2f position, Vector2f size, const string& buttonText, function<void()> onClickFunc, 
-        Color defaultCol = Color::Transparent, Color hoverCol = Color::Cyan)
-        : defaultColor(defaultCol), hoverColor(hoverCol) {
+        Color defaultCol = Color::Transparent, Color hoverCol = Color::Cyan) : defaultColor(defaultCol), hoverColor(hoverCol) {
 
         if (!font.loadFromFile("minecraft_font.ttf")) {
             cerr << "Error loading font\n";
@@ -32,7 +31,7 @@ public:
 
         // Center text within the button
         FloatRect textBounds = text.getLocalBounds();
-        text.setOrigin(textBounds.left + textBounds.width / 2.0f, textBounds.top + textBounds.height / 2.0f);
+        text.setOrigin(textBounds.left + textBounds.width / 2.0f, textBounds.top + textBounds.height / 2.0f);   //  x, y axis
         text.setPosition(position + size / 2.0f);
 
         // Set up shape
@@ -45,22 +44,22 @@ public:
         onClick = onClickFunc;
     }
 
-    void draw(RenderWindow& window) {
+    void draw(RenderWindow& window) {   //  Draws shape and text on the window.
         window.draw(shape);
         window.draw(text);
     }
 
-    bool contains(Vector2f point) {
+    bool contains(Vector2f point) {     //  Determines whether a given point is inside a shape by checking if the shape's bounding rectangle contains that point.
         return shape.getGlobalBounds().contains(point);
     }
 
-    void handleClick() {
+    void handleClick() {                //  Handles what happen on click.
         if (onClick) {
             onClick();
         }
     }
 
-    void handleHover(Vector2f mousePos) {
+    void handleHover(Vector2f mousePos) {   //  Changing colour when the mouse is inside the bound of the shape.
         if (shape.getGlobalBounds().contains(mousePos)) {
             shape.setFillColor(hoverColor);
         }
