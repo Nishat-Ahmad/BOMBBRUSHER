@@ -2,28 +2,33 @@
 #include<SFML\Graphics.hpp>
 #include<Windows.h>
 
+// -------Utilizing multi-level inheritance-------
+// class to initialize the main board of the game
 class Board {
 protected:
-	mouseClick click;
-	Button** buttons;
-	Mine** mine;
-	int** board;
-	const int x_offset = 10, y_offset = 10, spacing_factor = 32;
-	int x, y;
-	int total_mines = 0;
-	Vector2f mousePos;
-	int difficulty;
-	bool firstClick = true;
+	mouseClick click;	// instance of enum mouseClick
+	Button** buttons;	// double pointer object of Button type to create a 2d dynamic array.
+	Mine** mine;		// double pointer of enum Mine type to create a 2d dynamic array. 
+	int** board;		// double pointer of int type to create a 2d dynamic array.
+	const int x_offset = 10, y_offset = 10, spacing_factor = 32;	// constant x and y distance from the left and upper window edges and the spacing between each tile
+	int x, y;			// variables to hold indexes of the clicked button		
+	int total_mines = 0; // initializing total mines
+	Vector2f mousePos;  // variable to hold the current position of mouse. Vector2f being a 2 dimensional float carrying type.
+	int difficulty;		// difficulty variable that tells the difficulty as well as the tiles generated
+	bool firstClick = true; // boolean that runs for the first click to ensure that a mine is not placed on the first click
 
 public:
+
+// Parameterized constructor with default parameter of difficulty = 10
 	Board(int difficulty = 10) {
-		int numberOfMines;
 		this->difficulty = difficulty;
 
 		srand(time(0));
 		allocateMemory();
 		Initialize_button();
 	}
+
+// Dynamically allocates memory to all the double pointers created
 	void allocateMemory() {
 		buttons = new Button * [difficulty];
 		mine = new Mine * [difficulty];
@@ -34,6 +39,8 @@ public:
 			board[i] = new int[difficulty];
 		}
 	}
+
+// Initializes button by setting their position accordingly
 	void Initialize_button() {
 		int coor_x = x_offset;
 		int coor_y = y_offset;
@@ -48,6 +55,8 @@ public:
 			coor_x = x_offset;
 		}
 	}
+
+// Function to generate mines at the start
 	void Randomize_mines() {
 		int numberOfMines;
 		switch (difficulty) {
@@ -71,6 +80,7 @@ public:
 		}
 	}
 
+// Function to initialize values to mine and board arrays
 	void Initialize_board() {
 		for (int i = 0; i < difficulty; i++) {
 			for (int j = 0; j < difficulty; j++) {
@@ -90,6 +100,7 @@ public:
 		}
 	}
 
+// Function to print the board after every iteration
 	void Print(RenderWindow* window) {
 		for (int i = 0; i < difficulty; i++) {
 			for (int j = 0; j < difficulty; j++) {
@@ -103,8 +114,8 @@ public:
 		}
 	}
 
+// Function to assign coordinates to x and y upon click according to the mouse's position
 	void assignCoordinates(RenderWindow* window) {
-		int numberOfMines;
 		for (int i = 0; i < difficulty; i++) {
 			for (int j = 0; j < difficulty; j++) {
 				click = buttons[i][j].Click(Vector2f(static_cast<float>(Mouse::getPosition(*window).x), static_cast<float>(Mouse::getPosition(*window).y)));
@@ -118,7 +129,8 @@ public:
 
 	}
 
-	~Board() {
+// Virtual destruction to safely deallocate the memory when an object is deleted.
+	virtual ~Board() {
 		for (int i = 0; i < difficulty; i++) {
 			delete[] buttons[i];
 			delete[] mine[i];
@@ -130,6 +142,7 @@ public:
 	}
 };
 
+// Class that holds all the backend functionality of the game when its running
 class bombCheck : public Board {
 protected:
 	int choice;
@@ -137,9 +150,8 @@ protected:
 public:
 	bombCheck(int difficulty = 10) : Board(difficulty) {}
 	bool gameRunner = true;
-	void checkEmpty() {
 
-	}
+// Checks the number of mines around a tile when expandSpace function is called
 	int checkMine() {
 		int mine_counter = 0;
 		if (mine[x][y] == SPACE && buttons[x][y].getButtonState() == USED) {
@@ -159,6 +171,7 @@ public:
 		}
 	}
 
+// Checks the number of flags around the tile when expandSpace function is called
 	int checkFlag() {
 		int flag_Counter = 0;
 		for (int k = -1; k <= 1; k++) {
@@ -175,6 +188,7 @@ public:
 		return flag_Counter;
 	}
 
+// Function to place flag on button click
 	void placeFlag() {
 		if (mine[x][y] == MINE) {
 			total_mines--;
@@ -183,6 +197,7 @@ public:
 		buttons[x][y].setButtonState(ACTIVE);
 	}
 
+// Function to remove an already placed flag
 	void removeFlag() {
 		if (buttons[x][y].getButtonState() == ACTIVE) {
 			buttons[x][y].setButtonState(IDLE);
@@ -193,6 +208,7 @@ public:
 		}
 	}
 
+// Post-game function that indicates loss
 	void lose() {
 		for (int i = 0; i < difficulty; i++) {
 			for (int j = 0; j < difficulty; j++) {
@@ -204,6 +220,7 @@ public:
 		gameRunner = false;
 	}
 
+// Post-game funciton that indicates win
 	void win() {
 		for (int i = 0; i < difficulty; i++) {
 			for (int j = 0; j < difficulty; j++) {
@@ -214,6 +231,7 @@ public:
 		gameRunner = false;
 	}
 
+// Function that reveals a Space if there are no more MINES left around the tile
 	void revealSpace() {
 		if (mine[x][y] == MINE) {
 			buttons[x][y].setButtonState(USED);
@@ -224,6 +242,7 @@ public:
 		}
 	}
 
+// Function that Expands the space in the tile's radius if the condition is true
 	void expandSpace(RenderWindow* window) {
 		int mine_Counter = checkMine();
 		int flag_Counter = checkFlag();
@@ -247,9 +266,13 @@ public:
 	}
 };
 
+// Main gameplay class that integrates all the functions in one place and keeps the game running
 class Game : public bombCheck {
 public:
+// Parameterized constructor
 	Game(int difficulty = 10) : bombCheck(difficulty) {}
+
+// Function to keep all the functions in one place and check the click conditions to run them accordingly
 	void gamecontroller(RenderWindow* window) {
 		click = I;
 		Print(window);
