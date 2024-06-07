@@ -4,7 +4,7 @@
 #include"textBox.cpp"
 #include"screenButton.cpp"
 #include<iostream>
-
+ 
 using namespace sf;
 using namespace std;
 
@@ -23,7 +23,7 @@ void Pause(bool game_pause, RenderWindow* window, Game* play, Event event) {
 			return;
 		}
 	}
-}
+} 
 
 int main() {
 	//	Renders the main window.
