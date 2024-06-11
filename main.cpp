@@ -4,7 +4,7 @@
 #include"textBox.cpp"
 #include"screenButton.cpp"
 #include<iostream>
- 
+  
 using namespace sf;
 using namespace std;
 
