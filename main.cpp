@@ -4,14 +4,14 @@
 #include"textBox.cpp"
 #include"screenButton.cpp"
 #include<iostream>
-  
+ 
 using namespace sf;
 using namespace std;
 
 // Creates a loop that displays a pause screen until the game is unpaused.
 // It continuously checks for user input to resume the game or close the window.
 void Pause(bool game_pause, RenderWindow* window, Game* play, Event event) {
-	while (game_pause) {
+	while (game_pause) { 
 		window->clear();
 		play->Print(window);
 		window->display(); 
@@ -29,79 +29,29 @@ int main() {
 	//	Renders the main window.
 	RenderWindow window(VideoMode(400, 400), "BOMBBRUSHER");
 
-	//	Code that runs the easy mode of the game.
-	//  openEasyModeWindow is a lambda function.
-	auto openEasyModeWindow = [&]() {
-		//	Renders the easy game mode.
-		RenderWindow easyGameWindow(VideoMode(340, 400), "BOMBBRUSHER");
+	//	Code that runs the easy, medium & hard mode windows of the game.
+	auto openGameModeWindow = [&](int difficultyValue, int windowWidth, int windowHeigth) {
+
+		RenderWindow GameWindow(VideoMode(windowWidth, windowHeigth), "BOMBBRUSHER");
+		GameWindow.clear(Color::White);
 		Event event;
 
-		Game* play = new Game;
+		Game* play = new Game(difficultyValue);
 
-		while (easyGameWindow.isOpen()) {
-			while (easyGameWindow.pollEvent(event)) {
+		while (GameWindow.isOpen()) {
+			while (GameWindow.pollEvent(event)) {
 				if (event.type == Event::Closed) {
-					easyGameWindow.close();
+					GameWindow.close();
 				}
-				easyGameWindow.clear();
-				play->gamecontroller(&easyGameWindow);
+				GameWindow.clear();
+				play->gamecontroller(&GameWindow);
 				if (play->gameRunner == false) {
-					Pause(true, &easyGameWindow, play, event);
+					Pause(true, &GameWindow, play, event);
 					delete play;
-					play = new Game;
+					play = new Game(difficultyValue);
 					play->gameRunner = true;
 				}
-				easyGameWindow.display();
-			}
-		}
-		};
-
-	auto openMediumModeWindow = [&]() {
-		//	Renders the easy game mode.
-		RenderWindow mediumGameWindow(VideoMode(500, 540), "BOMBBRUSHER");
-		Event event;
-
-		Game* play = new Game(15);
-
-		while (mediumGameWindow.isOpen()) {
-			while (mediumGameWindow.pollEvent(event)) {
-				if (event.type == Event::Closed) {
-					mediumGameWindow.close();
-				}
-				mediumGameWindow.clear();
-				play->gamecontroller(&mediumGameWindow);
-				if (play->gameRunner == false) {
-					Pause(true, &mediumGameWindow, play, event);
-					delete play;
-					play = new Game(15);
-					play->gameRunner = true;
-				}
-				mediumGameWindow.display();
-			}
-		}
-	};
-
-	auto openHardModeWindow = [&]() {
-		//	Renders the easy game mode.
-		RenderWindow HardGameWindow(VideoMode(660, 700), "BOMBBRUSHER");
-		Event event;
-
-		Game* play = new Game(20);
-
-		while (HardGameWindow.isOpen()) {
-			while (HardGameWindow.pollEvent(event)) {
-				if (event.type == Event::Closed) {
-					HardGameWindow.close();
-				}
-				HardGameWindow.clear();
-				play->gamecontroller(&HardGameWindow);
-				if (play->gameRunner == false) {
-					Pause(true, &HardGameWindow, play, event);
-					delete play;
-					play = new Game(20);
-					play->gameRunner = true;
-				}
-				HardGameWindow.display();
+				GameWindow.display();
 			}
 		}
 	};
@@ -188,19 +138,19 @@ int main() {
 		ScreenButton easyDifficultyButton(Vector2f(300, 150), Vector2f(200, 50), "Easy", [&]() {  	//	Object of easy difficulty button.
 			cout << "Easy button clicked!\n";
 			selectDifficultyWindow.close();
-			openEasyModeWindow();
+			openGameModeWindow(10, 340, 400);
 			});
 
 		ScreenButton mediumDifficultyButton(Vector2f(300, 250), Vector2f(200, 50), "Medium", [&]() {  	//	Object of medium difficulty button.
 			cout << "Medium button clicked!\n";
 			selectDifficultyWindow.close();
-			openMediumModeWindow();
+			openGameModeWindow(15, 500, 540);
 			});
 
 		ScreenButton hardDifficultyButton(Vector2f(300, 350), Vector2f(200, 50), "Hard", [&]() {  	//	Object of hard difficulty button.
 			cout << "Hard button clicked!\n";
 			selectDifficultyWindow.close();
-			openHardModeWindow();
+			openGameModeWindow(20, 660, 700);
 			});
 
 		ScreenButton backButton(Vector2f(300, 450), Vector2f(200, 50), "Back", [&]() {		  	//	Object of back difficulty button.
