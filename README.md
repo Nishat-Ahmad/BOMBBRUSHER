@@ -86,15 +86,18 @@ iii. Game also restarts by pressing p.
   It includes the definition of three main classes—Board, bombCheck, and Game—each playing a crucial role in the game's mechanics and user interactions.
     
       Board Class:
-      Purpose: Initializes and manages the main game board, including mine placement and button setup.
+      Purpose: Initializes and manages the main game board, including mine placement and 
+      button setup.
    
       Key Functions:
-      Board(int difficulty = 10): Constructor to initialize the board with a specified difficulty level.
+      Board(int difficulty = 10): Constructor to initialize the board with a specified 
+      difficulty level.
       allocateMemory(): Allocates dynamic memory for the board, mines, and buttons.
       Initialize_button(): Sets initial positions and states of buttons.
       Randomize_mines(): Randomly places mines on the board, ensuring the first click is safe.
       Initialize_board(): Calculates the number of adjacent mines for each tile.
-      Print(RenderWindow* window): Renders the buttons and updates their textures based on the game state.
+      Print(RenderWindow* window): Renders the buttons and updates their textures based on the 
+      game state.
       assignCoordinates(RenderWindow* window): Determines the coordinates of the clicked button.
       ~Board(): Destructor to safely deallocate memory.
       
@@ -186,7 +189,8 @@ iii. Game also restarts by pressing p.
     
     Constructor:
     Score(int difficulty = 10): Initializes the score manager for the specified difficulty. 
-    Reads scores from the appropriate file (easy.txt, medium.txt, hard.txt) based on the difficulty level.
+    Reads scores from the appropriate file (easy.txt, medium.txt, hard.txt) based on 
+    the difficulty level.
     
     Sorting:
     void insertionSort(): Sorts the scores array using insertion sort.
@@ -219,10 +223,10 @@ iii. Game also restarts by pressing p.
     Key Functions:
     
     Constructor:
-    ScreenButton(Vector2f position, Vector2f size, const string& buttonText, function<void()> onClickFunc, 
-    Color defaultCol = Color::Transparent, Color hoverCol = Color::Cyan): Initializes the button 
-    with position, size, text, click behavior, and colors. It also loads the font and sets up the 
-    text and shape.
+    ScreenButton(Vector2f position, Vector2f size, const string& buttonText, 
+    function<void()> onClickFunc, Color defaultCol = Color::Transparent, 
+    Color hoverCol = Color::Cyan): Initializes the button with position, size, text, click behavior,
+    and colors. It also loads the font and sets up the text and shape.
     
     Drawing:
     void draw(RenderWindow& window): Draws the button's shape and text on the given window.
