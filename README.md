@@ -53,14 +53,17 @@ iii. Game also restarts by pressing p.
     Implements a loop that keeps the main window active and responsive to user inputs.
    
     Pause Function:
-    Contains a Pause function that displays a pause screen and waits for the user to unpause the game by pressing 'P'.
+    Contains a Pause function that displays a pause screen and waits for the user to unpause the game 
+    by pressing 'P'.
    
     Difficulty Selection and Game Modes:
-    Provides lambda functions to handle the opening of different game mode windows (easy, medium, hard) and the high score window.
-    Each difficulty level opens a new window with a corresponding game configuration.
+    Provides lambda functions to handle the opening of different game mode windows (easy, medium, hard) 
+    and the high score window. Each difficulty level opens a new window with a corresponding 
+    game configuration.
    
     High Score Window:
-    Implements a high score window that displays buttons for different difficulties and a back button to return to the main window.
+    Implements a high score window that displays buttons for different difficulties and a back
+    button to return to the main window.
    
     Difficulty Selection Window:
     Opens a window where users can select the game's difficulty level.
@@ -109,11 +112,14 @@ iii. Game also restarts by pressing p.
       expandSpace(RenderWindow* window): Expands the revealable area around a clicked tile.
       
       Game Class:
-      Purpose: Integrates and manages the overall gameplay loop, handling user interactions and game state transitions.
+      Purpose: Integrates and manages the overall gameplay loop, handling user interactions 
+      and game state transitions.
    
       Key Functions:
-      Game(int difficulty = 10): Constructor to initialize the game with a specified difficulty level.
-      gamecontroller(RenderWindow* window): Manages the game flow by coordinating different actions based on user input.
+      Game(int difficulty = 10): Constructor to initialize the game with a specified 
+      difficulty level.
+      gamecontroller(RenderWindow* window): Manages the game flow by coordinating different 
+      actions based on user input.
 
 
    
@@ -143,13 +149,16 @@ iii. Game also restarts by pressing p.
     int getIndex_y(int starting_pos, int spacing_factor): Calculates the y-index based on position.
     
     Interaction Handling:
-    mouseClick Click(Vector2f mousePos): Handles mouse click events and returns the type of click (left, right, idle).
+    mouseClick Click(Vector2f mousePos): Handles mouse click events and returns the type of 
+    click (left, right, idle).
+    
     Rendering:
     void RenderButton(RenderWindow* window): Draws the button on the specified window.
     
     Text Management:
     void setText(int number_of_mines): Sets the text based on the number of adjacent mines.
-    void UpdateText(int number_of_mines, RenderWindow* window): Updates and renders the text if the button is revealed.
+    void UpdateText(int number_of_mines, RenderWindow* window): Updates and renders the text 
+    if the button is revealed.
     
     Texture Updates:
     void updateTexture_Tile(): Updates the texture to the default tile.
@@ -170,7 +179,8 @@ iii. Game also restarts by pressing p.
   sorting the scores using insertion sort, and tracking the time taken to complete a game.
     
     Score Class:
-    Purpose: Manages game scores by reading from and writing to files, sorting scores, and tracking game time.
+    Purpose: Manages game scores by reading from and writing to files, sorting scores, and tracking 
+    game time.
     
     Key Functions:
     
@@ -210,8 +220,9 @@ iii. Game also restarts by pressing p.
     
     Constructor:
     ScreenButton(Vector2f position, Vector2f size, const string& buttonText, function<void()> onClickFunc, 
-    Color defaultCol = Color::Transparent, Color hoverCol = Color::Cyan): Initializes the button with position, 
-    size, text, click behavior, and colors. It also loads the font and sets up the text and shape.
+    Color defaultCol = Color::Transparent, Color hoverCol = Color::Cyan): Initializes the button 
+    with position, size, text, click behavior, and colors. It also loads the font and sets up the 
+    text and shape.
     
     Drawing:
     void draw(RenderWindow& window): Draws the button's shape and text on the given window.
