@@ -3,7 +3,7 @@ A simple Minesweeper game implemented in C++ using SFML graphics library.
 
 
 ## Project status
-_*The development for the project has officially been stopped.*_
+_*Ded.*_
 
 
 ## Installation
